@@ -44,6 +44,9 @@ Table User {
   image String
   accounts Account [not null]
   sessions Session [not null]
+  Order Order [not null]
+  Cart Cart [not null]
+  Wishlist Wishlist [not null]
 }
 
 Table VerificationToken {
@@ -65,6 +68,9 @@ Table Product {
   thumbnail String [not null]
   ProductImages ProductImages [not null]
   ProductCategory ProductCategory [not null]
+  OrderItem OrderItem [not null]
+  CartItem CartItem [not null]
+  Wishlist Wishlist [not null]
 }
 
 Table ProductImages {
@@ -93,6 +99,48 @@ Table ProductCategory {
   }
 }
 
+Table Order {
+  id Int [pk, increment]
+  status String [not null]
+  totalPrice Int [not null]
+  user User [not null]
+  userId String [not null]
+  OrderItem OrderItem [not null]
+}
+
+Table OrderItem {
+  id Int [pk, increment]
+  product Product [not null]
+  productId Int [not null]
+  quantity Int [not null]
+  order Order [not null]
+  orderId Int [not null]
+}
+
+Table Cart {
+  id Int [pk, increment]
+  user User [not null]
+  userId String [not null]
+  CartItem CartItem [not null]
+}
+
+Table CartItem {
+  id Int [pk, increment]
+  quantity Int [not null]
+  product Product [not null]
+  productId Int [not null]
+  cart Cart [not null]
+  cartId Int [not null]
+}
+
+Table Wishlist {
+  id Int [pk, increment]
+  user User [not null]
+  userId String [not null]
+  product Product [not null]
+  productId Int [not null]
+}
+
 Ref: Account.userId > User.id [delete: Cascade]
 
 Ref: Session.userId > User.id [delete: Cascade]
@@ -102,3 +150,19 @@ Ref: ProductImages.productId > Product.id
 Ref: ProductCategory.productId > Product.id
 
 Ref: ProductCategory.categoryId > Category.id
+
+Ref: Order.userId > User.id
+
+Ref: OrderItem.productId > Product.id
+
+Ref: OrderItem.orderId > Order.id
+
+Ref: Cart.userId > User.id
+
+Ref: CartItem.productId > Product.id
+
+Ref: CartItem.cartId > Cart.id
+
+Ref: Wishlist.userId > User.id
+
+Ref: Wishlist.productId > Product.id
